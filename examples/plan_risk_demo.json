@@ -1,0 +1,60 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "resource_changes": [
+    {
+      "address": "aws_db_instance.prod_main",
+      "mode": "managed",
+      "type": "aws_db_instance",
+      "name": "prod_main",
+      "change": {
+        "actions": ["delete"],
+        "before": {
+          "identifier": "prod-main-db",
+          "engine": "postgres",
+          "tags": {"Environment": "production", "Service": "api"}
+        },
+        "after": null
+      }
+    },
+    {
+      "address": "aws_ecs_service.api",
+      "mode": "managed",
+      "type": "aws_ecs_service",
+      "name": "api",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": {
+          "name": "api-service",
+          "desired_count": 2
+        },
+        "after": {
+          "name": "api-service",
+          "desired_count": 3
+        }
+      }
+    },
+    {
+      "address": "aws_security_group.web",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "web",
+      "change": {
+        "actions": ["update"],
+        "before": {"ingress": []},
+        "after": {"ingress": [{"from_port": 443}]}
+      }
+    },
+    {
+      "address": "aws_cloudwatch_log_group.app",
+      "mode": "managed",
+      "type": "aws_cloudwatch_log_group",
+      "name": "app",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"name": "/app/logs"}
+      }
+    }
+  ]
+}

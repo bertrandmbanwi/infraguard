@@ -1,0 +1,61 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "resource_changes": [
+    {
+      "address": "module.staging_vpc.aws_vpc.main",
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "main",
+      "change": {
+        "actions": ["update"],
+        "before": {"cidr_block": "10.0.0.0/16"},
+        "after": {"cidr_block": "10.0.0.0/16", "tags": {"Environment": "staging"}}
+      }
+    },
+    {
+      "address": "aws_s3_bucket.prod_data",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "prod_data",
+      "change": {
+        "actions": ["delete"],
+        "before": {"bucket": "prod-data-bucket"},
+        "after": null
+      }
+    },
+    {
+      "address": "aws_lambda_function.dev_processor",
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "dev_processor",
+      "change": {
+        "actions": ["update"],
+        "before": {"runtime": "python3.11"},
+        "after": {"runtime": "python3.12"}
+      }
+    },
+    {
+      "address": "aws_ssm_parameter.config",
+      "mode": "managed",
+      "type": "aws_ssm_parameter",
+      "name": "config",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {"name": "/app/config", "type": "String"}
+      }
+    },
+    {
+      "address": "data.aws_ami.latest",
+      "mode": "data",
+      "type": "aws_ami",
+      "name": "latest",
+      "change": {
+        "actions": ["read"],
+        "before": null,
+        "after": {}
+      }
+    }
+  ]
+}

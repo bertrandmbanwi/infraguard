@@ -1,0 +1,42 @@
+# Example tag compliance policy for infraguard tag-audit
+# Usage: infraguard tag-audit --file resources.json --rules tag_policy.yaml
+
+required_tags:
+  - key: Environment
+    allowed_values:
+      - production
+      - staging
+      - development
+      - sandbox
+  - key: Team
+  - key: Service
+  - key: ManagedBy
+    allowed_values:
+      - terraform
+      - cloudformation
+      - pulumi
+      - cdk
+      - manual
+  - key: CostCenter
+    pattern: "^CC-\\d{4}$"
+
+naming_conventions:
+  prohibited_prefixes:
+    - "aws:"
+    - "temp_"
+    - "test_"
+  prohibited_values:
+    - ""
+    - "null"
+    - "none"
+    - "undefined"
+    - "N/A"
+    - "todo"
+
+resource_overrides:
+  aws_s3_bucket:
+    additional_required:
+      - DataClassification
+  aws_db_instance:
+    additional_required:
+      - BackupSchedule

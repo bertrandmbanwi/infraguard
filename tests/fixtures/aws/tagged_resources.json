@@ -1,0 +1,74 @@
+{
+  "resources": [
+    {
+      "resource_id": "i-0abc123def456",
+      "resource_type": "aws_instance",
+      "service": "ec2",
+      "region": "us-east-1",
+      "tags": {
+        "Environment": "production",
+        "Team": "platform",
+        "Service": "api",
+        "ManagedBy": "terraform"
+      }
+    },
+    {
+      "resource_id": "i-0def789abc012",
+      "resource_type": "aws_instance",
+      "service": "ec2",
+      "region": "us-east-1",
+      "tags": {
+        "Name": "worker-node"
+      }
+    },
+    {
+      "resource_id": "my-data-bucket",
+      "resource_type": "aws_s3_bucket",
+      "service": "s3",
+      "region": "us-east-1",
+      "tags": {
+        "Environment": "production",
+        "Team": "data"
+      },
+      "arn": "arn:aws:s3:::my-data-bucket"
+    },
+    {
+      "resource_id": "prod-api-db",
+      "resource_type": "aws_db_instance",
+      "service": "rds",
+      "region": "us-east-1",
+      "tags": {
+        "Environment": "production",
+        "Team": "platform",
+        "Service": "api",
+        "ManagedBy": "terraform",
+        "CostCenter": "INVALID"
+      }
+    },
+    {
+      "resource_id": "staging-processor",
+      "resource_type": "aws_lambda_function",
+      "service": "lambda",
+      "region": "us-east-1",
+      "tags": {
+        "Environment": "staging",
+        "Team": "data",
+        "Service": "etl",
+        "ManagedBy": "terraform"
+      }
+    },
+    {
+      "resource_id": "i-0nnn999mmm888",
+      "resource_type": "aws_instance",
+      "service": "ec2",
+      "region": "us-east-1",
+      "tags": {
+        "Environment": "invalid-env",
+        "Team": "",
+        "Service": "web",
+        "ManagedBy": "terraform",
+        "temp_debug": "true"
+      }
+    }
+  ]
+}
