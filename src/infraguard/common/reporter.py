@@ -16,10 +16,6 @@ from infraguard.common.severity import Severity
 
 console = Console(stderr=True)
 
-
-# ── Table (Rich) ──────────────────────────────────────────────
-
-
 def render_plan_risk_table(report: Report, threshold: int | None = None) -> None:
     """Print a Rich-formatted plan risk report to stderr."""
     console.print()
@@ -79,7 +75,6 @@ def render_plan_risk_table(report: Report, threshold: int | None = None) -> None
             )
     console.print()
 
-
 def render_findings_table(report: Report, title: str, threshold_info: str = "") -> None:
     """Print a Rich-formatted findings report to stderr."""
     console.print()
@@ -119,17 +114,9 @@ def render_findings_table(report: Report, title: str, threshold_info: str = "") 
         console.print(f"  {threshold_info}")
     console.print()
 
-
-# ── JSON ──────────────────────────────────────────────────────
-
-
 def render_json(report: Report) -> None:
     """Print JSON report to stdout."""
     sys.stdout.write(report.to_json() + "\n")
-
-
-# ── Markdown ──────────────────────────────────────────────────
-
 
 def render_plan_risk_markdown(report: Report, threshold: int | None = None) -> None:
     """Print markdown-formatted plan risk report to stdout."""
@@ -162,7 +149,6 @@ def render_plan_risk_markdown(report: Report, threshold: int | None = None) -> N
 
     sys.stdout.write("\n".join(lines) + "\n")
 
-
 def render_findings_markdown(report: Report, title: str) -> None:
     """Print markdown-formatted findings report to stdout."""
     lines = [f"## {title}", ""]
@@ -185,10 +171,6 @@ def render_findings_markdown(report: Report, title: str) -> None:
         lines.append(f"**Summary:** {', '.join(parts)}")
 
     sys.stdout.write("\n".join(lines) + "\n")
-
-
-# ── SARIF ─────────────────────────────────────────────────────
-
 
 def render_sarif(report: Report) -> None:
     """Print SARIF 2.1.0 report to stdout for GitHub Code Scanning integration."""
@@ -248,10 +230,6 @@ def render_sarif(report: Report) -> None:
 
     sys.stdout.write(json.dumps(sarif, indent=2) + "\n")
 
-
-# ── Helpers ───────────────────────────────────────────────────
-
-
 def _severity_emoji(severity: Severity) -> str:
     return {
         Severity.CRITICAL: ":red_circle:",
@@ -260,7 +238,6 @@ def _severity_emoji(severity: Severity) -> str:
         Severity.LOW: ":blue_circle:",
         Severity.INFO: ":white_circle:",
     }[severity]
-
 
 def _sarif_level(severity: Severity) -> str:
     if severity >= Severity.HIGH:

@@ -37,7 +37,6 @@ def evaluate(
     for resource in resources:
         resource_findings = _check_resource(resource, tag_rules, name_rules, overrides)
 
-        # Track per-service stats
         svc = resource.service
         if svc not in service_stats:
             service_stats[svc] = {"total": 0, "compliant": 0}
@@ -49,7 +48,6 @@ def evaluate(
         else:
             findings.extend(resource_findings)
 
-    # Build summary
     compliance_pct = (compliant_count / total_count * 100) if total_count else 100.0
     summary: dict[str, Any] = {
         "total_resources": total_count,
@@ -70,7 +68,6 @@ def evaluate(
 
     return Report(module="tag-audit", findings=findings, summary=summary)
 
-
 def _check_resource(
     resource: TaggedResource,
     tag_rules: list[dict],
@@ -80,10 +77,8 @@ def _check_resource(
     """Check a single resource against all tag rules."""
     findings: list[Finding] = []
 
-    # Check required tags
     effective_rules = list(tag_rules)
 
-    # Add resource-type-specific overrides
     if resource.resource_type in overrides:
         for extra_key in overrides[resource.resource_type].get("additional_required", []):
             effective_rules.append({"key": extra_key})
@@ -106,7 +101,6 @@ def _check_resource(
             )
             continue
 
-        # Check allowed values
         allowed = rule.get("allowed_values")
         if allowed and value not in allowed:
             findings.append(
@@ -121,7 +115,6 @@ def _check_resource(
                 )
             )
 
-        # Check pattern
         pattern = rule.get("pattern")
         if pattern and not re.match(pattern, value):
             findings.append(
@@ -136,7 +129,6 @@ def _check_resource(
                 )
             )
 
-    # Check naming conventions
     prohibited_prefixes = name_rules.get("prohibited_prefixes", [])
     prohibited_values = name_rules.get("prohibited_values", [])
 

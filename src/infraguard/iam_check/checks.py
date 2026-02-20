@@ -37,7 +37,6 @@ def check_admin_access(
         )
     return findings
 
-
 def check_wildcard_actions(
     statement: dict[str, Any], stmt_index: int, policy_name: str
 ) -> list[Finding]:
@@ -51,7 +50,7 @@ def check_wildcard_actions(
 
     for action in actions:
         if action == "*":
-            continue  # Handled by admin_access check
+            continue
 
         if action.endswith(":*"):
             service = action.split(":")[0]
@@ -77,7 +76,6 @@ def check_wildcard_actions(
             )
     return findings
 
-
 def check_wildcard_resources(
     statement: dict[str, Any], stmt_index: int, policy_name: str
 ) -> list[Finding]:
@@ -93,11 +91,9 @@ def check_wildcard_resources(
     if "*" not in resources:
         return findings
 
-    # Skip if already flagged as full admin
     if "*" in actions:
         return findings
 
-    # Check if any action is on a sensitive service
     has_sensitive = any(
         any(a.startswith(prefix) for prefix in SENSITIVE_SERVICE_PREFIXES)
         for a in actions
@@ -115,7 +111,6 @@ def check_wildcard_resources(
         )
     )
     return findings
-
 
 def check_dangerous_actions(
     statement: dict[str, Any], stmt_index: int, policy_name: str
@@ -142,7 +137,6 @@ def check_dangerous_actions(
             )
     return findings
 
-
 def check_missing_conditions(
     statement: dict[str, Any], stmt_index: int, policy_name: str
 ) -> list[Finding]:
@@ -156,7 +150,7 @@ def check_missing_conditions(
         return findings
 
     if conditions:
-        return findings  # Conditions present, skip
+        return findings
 
     sensitive_actions = [
         a for a in actions
@@ -175,7 +169,6 @@ def check_missing_conditions(
         )
     return findings
 
-
 def check_cross_account_access(
     statement: dict[str, Any], stmt_index: int, policy_name: str
 ) -> list[Finding]:
@@ -191,7 +184,6 @@ def check_cross_account_access(
     if not principal:
         return findings
 
-    # Check for cross-account principals
     aws_principals = []
     if isinstance(principal, str):
         if principal == "*":
@@ -216,10 +208,6 @@ def check_cross_account_access(
             )
         )
     return findings
-
-
-# ── Helpers ───────────────────────────────────────────────────
-
 
 def _normalize_list(value: Any) -> list[str]:
     """Ensure a value is a list of strings (IAM allows string or list)."""

@@ -26,7 +26,6 @@ class Severity(IntEnum):
     def icon(self) -> str:
         return _ICONS[self]
 
-
 _COLORS: dict[Severity, str] = {
     Severity.INFO: "dim",
     Severity.LOW: "cyan",

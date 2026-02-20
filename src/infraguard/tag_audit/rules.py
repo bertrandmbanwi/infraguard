@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-# ── Default required tags ─────────────────────────────────────
-# Every resource should have at minimum these tags.
-
 DEFAULT_REQUIRED_TAGS: list[dict] = [
     {
         "key": "Environment",
@@ -21,9 +18,6 @@ DEFAULT_REQUIRED_TAGS: list[dict] = [
         "allowed_values": ["terraform", "cloudformation", "manual", "pulumi", "cdk"],
     },
 ]
-
-# ── Service-to-boto3 mapping ──────────────────────────────────
-# Maps service names to the boto3 calls needed to scan them.
 
 SUPPORTED_SERVICES: dict[str, dict] = {
     "ec2": {
@@ -47,7 +41,7 @@ SUPPORTED_SERVICES: dict[str, dict] = {
         "method": "list_buckets",
         "resource_path": "Buckets",
         "id_key": "Name",
-        "tag_key": None,  # Requires separate get_bucket_tagging call
+        "tag_key": None,
         "resource_type": "aws_s3_bucket",
     },
     "lambda": {
@@ -62,7 +56,7 @@ SUPPORTED_SERVICES: dict[str, dict] = {
         "client": "ecs",
         "method": "list_clusters",
         "resource_path": "clusterArns",
-        "id_key": None,  # ARN is the id
+        "id_key": None,
         "tag_key": "tags",
         "resource_type": "aws_ecs_cluster",
     },
@@ -70,8 +64,8 @@ SUPPORTED_SERVICES: dict[str, dict] = {
         "client": "dynamodb",
         "method": "list_tables",
         "resource_path": "TableNames",
-        "id_key": None,  # Name is the id
-        "tag_key": None,  # Requires separate list_tags_of_resource
+        "id_key": None,
+        "tag_key": None,
         "resource_type": "aws_dynamodb_table",
     },
     "sns": {
@@ -79,20 +73,18 @@ SUPPORTED_SERVICES: dict[str, dict] = {
         "method": "list_topics",
         "resource_path": "Topics",
         "id_key": "TopicArn",
-        "tag_key": None,  # Requires separate list_tags_for_resource
+        "tag_key": None,
         "resource_type": "aws_sns_topic",
     },
     "sqs": {
         "client": "sqs",
         "method": "list_queues",
         "resource_path": "QueueUrls",
-        "id_key": None,  # URL is the id
-        "tag_key": None,  # Requires separate list_queue_tags
+        "id_key": None,
+        "tag_key": None,
         "resource_type": "aws_sqs_queue",
     },
 }
-
-# ── Naming conventions ────────────────────────────────────────
 
 DEFAULT_NAMING_RULES: dict = {
     "prohibited_prefixes": ["aws:", "temp_", "test_"],

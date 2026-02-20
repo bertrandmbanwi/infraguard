@@ -14,7 +14,6 @@ def load_rules(path: Path) -> dict[str, Any]:
         data = yaml.safe_load(f)
     return data if data else {}
 
-
 def merge_rules(defaults: dict[str, Any], overrides: dict[str, Any]) -> dict[str, Any]:
     """Deep-merge overrides into defaults. Lists are replaced, dicts are merged."""
     merged = defaults.copy()

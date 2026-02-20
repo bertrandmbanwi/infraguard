@@ -18,7 +18,6 @@ from infraguard.iam_check.analyzer import analyze_aws_role, analyze_policy_file
 app = typer.Typer(no_args_is_help=True)
 console = Console(stderr=True)
 
-
 def _parse_max_findings(value: str) -> dict[str, int]:
     """Parse max-findings threshold string like 'critical:0,high:3'."""
     result = {}
@@ -27,7 +26,6 @@ def _parse_max_findings(value: str) -> dict[str, int]:
         if len(parts) == 2:
             result[parts[0].strip().upper()] = int(parts[1].strip())
     return result
-
 
 @app.callback(invoke_without_command=True)
 def iam_check(

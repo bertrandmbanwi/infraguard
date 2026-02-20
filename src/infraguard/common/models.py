@@ -37,7 +37,6 @@ class Finding:
             "metadata": self.metadata,
         }
 
-
 @dataclass
 class RiskChange:
     """A scored resource change from a Terraform plan."""
@@ -62,7 +61,6 @@ class RiskChange:
             "risk_score": self.risk_score,
             "detail": self.detail,
         }
-
 
 @dataclass
 class Report:

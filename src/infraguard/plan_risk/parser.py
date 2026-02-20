@@ -15,7 +15,7 @@ class ResourceChange:
 
     address: str
     resource_type: str
-    action: str  # create, update, delete, replace, read, no-op
+    action: str
     name: str
     before: dict[str, Any] | None = None
     after: dict[str, Any] | None = None
@@ -32,7 +32,6 @@ class ResourceChange:
             return self.after["tags"]
         return {}
 
-
 def parse_plan(source: Path | None = None) -> list[ResourceChange]:
     """Parse terraform plan JSON from a file or stdin.
 
@@ -46,13 +45,11 @@ def parse_plan(source: Path | None = None) -> list[ResourceChange]:
 
     return _extract_changes(data)
 
-
 def _extract_changes(data: dict[str, Any]) -> list[ResourceChange]:
     """Extract resource changes from a terraform plan JSON structure."""
     changes: list[ResourceChange] = []
 
     for rc in data.get("resource_changes", []):
-        # Skip data sources
         if rc.get("mode") == "data":
             continue
 
@@ -79,7 +76,6 @@ def _extract_changes(data: dict[str, Any]) -> list[ResourceChange]:
         )
 
     return changes
-
 
 def _normalize_action(actions: list[str]) -> str:
     """Normalize terraform action list to a single action string.

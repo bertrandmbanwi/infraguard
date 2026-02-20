@@ -18,7 +18,6 @@ from infraguard.iam_check.checks import (
     check_wildcard_resources,
 )
 
-# All checks to run against each statement
 ALL_CHECKS = [
     check_admin_access,
     check_wildcard_actions,
@@ -27,7 +26,6 @@ ALL_CHECKS = [
     check_missing_conditions,
     check_cross_account_access,
 ]
-
 
 def analyze_policy_file(path: Path) -> Report:
     """Analyze a single IAM policy JSON file.
@@ -52,11 +50,9 @@ def analyze_policy_file(path: Path) -> Report:
             f"or 'policies' key in {path}"
         )
 
-
 def analyze_policy_document(document: dict[str, Any], policy_name: str = "inline") -> Report:
     """Analyze a single IAM policy document dict."""
     return _analyze_single(document, policy_name)
-
 
 def analyze_aws_role(
     role_name: str, profile: str | None = None, region: str = "us-east-1"
@@ -75,7 +71,6 @@ def analyze_aws_role(
 
     policies: list[dict[str, Any]] = []
 
-    # Inline policies
     inline_names = iam.list_role_policies(RoleName=role_name)["PolicyNames"]
     for name in inline_names:
         resp = iam.get_role_policy(RoleName=role_name, PolicyName=name)
@@ -84,7 +79,6 @@ def analyze_aws_role(
             doc = json.loads(unquote(doc))
         policies.append({"name": f"{role_name}/{name} (inline)", "document": doc})
 
-    # Attached managed policies
     attached = iam.list_attached_role_policies(RoleName=role_name)["AttachedPolicies"]
     for policy in attached:
         arn = policy["PolicyArn"]
@@ -98,7 +92,6 @@ def analyze_aws_role(
 
     return _analyze_multiple(policies)
 
-
 def _analyze_single(document: dict[str, Any], policy_name: str) -> Report:
     """Run all checks against a single policy document."""
     findings: list[Finding] = []
@@ -111,7 +104,6 @@ def _analyze_single(document: dict[str, Any], policy_name: str) -> Report:
         for check_fn in ALL_CHECKS:
             findings.extend(check_fn(stmt, i, policy_name))
 
-    # Deduplicate — same title + resource = same finding
     seen = set()
     unique_findings = []
     for f in findings:
@@ -122,7 +114,6 @@ def _analyze_single(document: dict[str, Any], policy_name: str) -> Report:
 
     summary = _build_summary(unique_findings, [policy_name])
     return Report(module="iam-check", findings=unique_findings, summary=summary)
-
 
 def _analyze_multiple(policies: list[dict[str, Any]]) -> Report:
     """Run checks across multiple policy documents."""
@@ -139,7 +130,6 @@ def _analyze_multiple(policies: list[dict[str, Any]]) -> Report:
 
     summary = _build_summary(all_findings, policy_names)
     return Report(module="iam-check", findings=all_findings, summary=summary)
-
 
 def _build_summary(findings: list[Finding], policy_names: list[str]) -> dict[str, Any]:
     """Build summary statistics for an IAM check report."""

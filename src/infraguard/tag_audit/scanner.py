@@ -29,7 +29,6 @@ class TaggedResource:
             "arn": self.arn,
         }
 
-
 def scan_from_file(path: Path) -> list[TaggedResource]:
     """Load resource data from a JSON file (offline/CI mode).
 
@@ -64,7 +63,6 @@ def scan_from_file(path: Path) -> list[TaggedResource]:
         )
     return resources
 
-
 def scan_aws(
     services: list[str] | None = None,
     profile: str | None = None,
@@ -97,11 +95,10 @@ def scan_aws(
             client = session.client(svc_config["client"])
             resources.extend(_scan_service(client, svc_name, svc_config, region, session))
         except Exception:
-            # Skip services that fail (permission issues, etc.)
+
             continue
 
     return resources
-
 
 def _scan_service(
     client: Any,
@@ -167,7 +164,7 @@ def _scan_service(
     elif svc_name == "lambda":
         resp = client.list_functions()
         for fn in resp.get("Functions", []):
-            # Lambda returns tags as a dict directly
+
             tags = fn.get("Tags", {}) or {}
             resources.append(
                 TaggedResource(

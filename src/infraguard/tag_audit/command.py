@@ -19,7 +19,6 @@ from infraguard.tag_audit.scanner import scan_aws, scan_from_file
 app = typer.Typer(no_args_is_help=True)
 console = Console(stderr=True)
 
-
 @app.callback(invoke_without_command=True)
 def tag_audit(
     file: Path | None = typer.Option(

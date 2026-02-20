@@ -60,10 +60,8 @@ def score_changes(
             )
         )
 
-    # Sort by risk score descending
     scored.sort(key=lambda c: c.risk_score, reverse=True)
 
-    # Build summary
     total = sum(c.risk_score for c in scored)
     highest = scored[0] if scored else None
     actions_summary = {}
@@ -80,20 +78,15 @@ def score_changes(
 
     return Report(module="plan-risk", changes=scored, summary=summary)
 
-
 def _detect_environment(address: str, env_map: dict[str, float]) -> float:
     """Detect environment from resource address using pattern matching."""
     addr_lower = address.lower()
 
-    # Check for environment patterns in the address
-    # Patterns like: module.prod_vpc, aws_instance.prod_web, prod-api-db
     for pattern, multiplier in sorted(env_map.items(), key=lambda x: -len(x[0])):
-        # Match as whole word to avoid false positives (e.g. "product" matching "prod")
         if re.search(rf"(?:^|[._\-/]){re.escape(pattern)}(?:$|[._\-/])", addr_lower):
             return multiplier
 
     return DEFAULT_ENVIRONMENT_MULTIPLIER
-
 
 def _build_detail(change: ResourceChange, criticality: Severity, env_mult: float) -> str:
     """Build a human-readable detail string for a scored change."""

@@ -17,7 +17,6 @@ from infraguard.plan_risk.scorer import score_changes
 
 app = typer.Typer(no_args_is_help=False)
 
-
 @app.callback(invoke_without_command=True)
 def plan_risk(
     file: Path | None = typer.Option(

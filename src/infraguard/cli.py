@@ -14,12 +14,10 @@ app = typer.Typer(
     pretty_exceptions_enable=False,
 )
 
-
 def version_callback(value: bool) -> None:
     if value:
         typer.echo(f"infraguard {__version__}")
         raise typer.Exit()
-
 
 @app.callback()
 def main(
@@ -34,8 +32,6 @@ def main(
 ) -> None:
     """Infrastructure guardrails for teams that ship fast."""
 
-
-# Register subcommands — imported here to avoid circular deps
 from infraguard.iam_check.command import app as iam_check_app  # noqa: E402
 from infraguard.plan_risk.command import app as plan_risk_app  # noqa: E402
 from infraguard.tag_audit.command import app as tag_audit_app  # noqa: E402

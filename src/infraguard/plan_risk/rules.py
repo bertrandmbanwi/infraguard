@@ -4,24 +4,16 @@ from __future__ import annotations
 
 from infraguard.common.severity import Severity
 
-# ── Action weights ────────────────────────────────────────────
-# Higher = more dangerous.  Maps terraform change actions to weights.
-
 ACTION_WEIGHTS: dict[str, int] = {
     "delete": 5,
-    "replace": 4,      # delete + create
+    "replace": 4,
     "update": 2,
     "create": 1,
     "read": 0,
     "no-op": 0,
 }
 
-# ── Resource criticality ─────────────────────────────────────
-# Maps Terraform resource types to severity levels.
-# Unknown types default to MEDIUM.
-
 RESOURCE_CRITICALITY: dict[str, Severity] = {
-    # CRITICAL — data stores, identity
     "aws_db_instance": Severity.CRITICAL,
     "aws_rds_cluster": Severity.CRITICAL,
     "aws_rds_cluster_instance": Severity.CRITICAL,
@@ -38,7 +30,6 @@ RESOURCE_CRITICALITY: dict[str, Severity] = {
     "azurerm_mssql_database": Severity.CRITICAL,
     "azurerm_storage_account": Severity.CRITICAL,
 
-    # HIGH — networking, compute clusters, DNS
     "aws_lb": Severity.HIGH,
     "aws_alb": Severity.HIGH,
     "aws_ecs_service": Severity.HIGH,
@@ -55,7 +46,6 @@ RESOURCE_CRITICALITY: dict[str, Severity] = {
     "google_container_cluster": Severity.HIGH,
     "azurerm_kubernetes_cluster": Severity.HIGH,
 
-    # MEDIUM — compute, networking building blocks
     "aws_instance": Severity.MEDIUM,
     "aws_security_group": Severity.MEDIUM,
     "aws_security_group_rule": Severity.MEDIUM,
@@ -71,7 +61,6 @@ RESOURCE_CRITICALITY: dict[str, Severity] = {
     "google_compute_instance": Severity.MEDIUM,
     "azurerm_virtual_machine": Severity.MEDIUM,
 
-    # LOW — observability, config, minor infra
     "aws_cloudwatch_log_group": Severity.LOW,
     "aws_cloudwatch_metric_alarm": Severity.LOW,
     "aws_ssm_parameter": Severity.LOW,
@@ -79,14 +68,10 @@ RESOURCE_CRITICALITY: dict[str, Severity] = {
     "aws_launch_template": Severity.LOW,
     "aws_ecr_repository": Severity.LOW,
 
-    # INFO — tags, outputs, data sources
     "aws_autoscaling_tag": Severity.INFO,
 }
 
 DEFAULT_CRITICALITY = Severity.MEDIUM
-
-# ── Environment detection ─────────────────────────────────────
-# Patterns matched against resource addresses to detect environment.
 
 ENVIRONMENT_MULTIPLIERS: dict[str, float] = {
     "prod": 2.0,
